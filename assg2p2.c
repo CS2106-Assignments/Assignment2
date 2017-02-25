@@ -22,9 +22,16 @@ int prime(int n) {
     return ret;
 }
 
-int primeCounter(int *numbers, int startIdx, int endIdx) {
+/**
+ * Counts the number of prime numbers in an array
+ * 
+ * @param startIdx starting index of the array.
+ * @param lenToRead sizeof the array to look at.
+ * @return count of prime numbers in the list.
+ */
+int primeCounter(int *numbers, int startIdx, int lenToRead) {
     int count = 0;
-    for (int i = startIdx; i < endIdx; i++) {
+    for (int i = startIdx; i < lenToRead; i++) {
         if (prime(numbers[i])) {
             count += 1;
         }
@@ -32,6 +39,12 @@ int primeCounter(int *numbers, int startIdx, int endIdx) {
     return count;
 }
 
+/**
+ * Parent will print out the total prime count including the child's count.
+ *
+ * @param fd controls the pipe for parent to read child number.
+ * @param data contains data to be analysed for prime.
+ */ 
 void parentPrintOutTotalPrimeCount(int *fd, int *data) {
     int cnum = 0;
     close(fd[OUT]);
@@ -44,6 +57,12 @@ void parentPrintOutTotalPrimeCount(int *fd, int *data) {
     printf("Total prime count = %d\n", primeCounts);
 }
 
+/**
+ * Child will send the parent its prime count.
+ *
+ * @param fd controls the pipe for child to send to parent.
+ * @param data contains data to be analysed for prime.
+ */
 void childSendParentPrimeCount(int *fd, int *data) {
     close(fd[IN]);
     int primeCounts = primeCounter(data, NUMELTS/2, NUMELTS);
@@ -69,7 +88,6 @@ int main() {
     }
 
     pid = fork();
-
     if (pid > 0) {
         parentPrintOutTotalPrimeCount(fd, data);
     } else if (pid == 0) {
