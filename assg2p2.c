@@ -30,8 +30,8 @@ int prime(int n) {
  * @return count of prime numbers in the list.
  */
 int primeCounter(int *numbers, int startIdx, int lenToRead) {
-    int count = 0;
-    for (int i = startIdx; i < lenToRead; i++) {
+    int count = 0, i;
+    for (i = startIdx; i < lenToRead; i++) {
         if (prime(numbers[i])) {
             count += 1;
         }
@@ -71,7 +71,7 @@ void childSendParentPrimeCount(int *fd, int *data) {
 }
 
 int main() {
-    int data[NUMELTS];
+    int data[NUMELTS], i;
     srand(time(NULL));
     pid_t pid = -1;
 
@@ -83,7 +83,7 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    for (int i = 0; i < NUMELTS; i++) {
+    for (i = 0; i < NUMELTS; i++) {
         data[i] = (int) (((double) rand() / (double) RAND_MAX) * 10000);
     }
 
